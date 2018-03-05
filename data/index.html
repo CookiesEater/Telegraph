@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Телеграф</title>
+    <style>
+    html {
+      box-sizing: border-box;
+      font-family: sans-serif;
+      line-height: 1.15;
+      min-height: 100%
+    }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-size: 1rem;
+      font-weight: normal;
+      line-height: 1.5;
+      color: #212529;
+      background-color: #fff;
+      min-height: 100%
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 0;
+      margin-bottom: .5rem;
+    }
+    .container {
+      margin-right: auto;
+      margin-left: auto;
+      padding-right: 30px;
+      padding-left: 30px;
+    }
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    .form-control {
+      display: block;
+      width: 100%;
+      padding: 0.5rem 0.75rem;
+      font-size: 1rem;
+      line-height: 1.25;
+      color: #495057;
+      background-color: #fff;
+      background-image: none;
+      background-clip: padding-box;
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      border-radius: 0.25rem;
+      transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+      box-sizing: border-box;
+    }
+    .form-control:focus {
+      color: #495057;
+      background-color: #fff;
+      border-color: #80bdff;
+      outline: none;
+    }
+    .form-control::-webkit-input-placeholder {
+      color: #868e96;
+      opacity: 1;
+    }
+
+    .form-control:-ms-input-placeholder {
+      color: #868e96;
+      opacity: 1;
+    }
+
+    .form-control::placeholder {
+      color: #868e96;
+      opacity: 1;
+    }
+    .btn {
+      display: inline-block;
+      font-weight: normal;
+      text-align: center;
+      white-space: nowrap;
+      vertical-align: middle;
+      -webkit-user-select: none;
+         -moz-user-select: none;
+          -ms-user-select: none;
+              user-select: none;
+      border: 1px solid transparent;
+      padding: 0.5rem 0.75rem;
+      font-size: 1rem;
+      line-height: 1.25;
+      border-radius: 0.25rem;
+      transition: all 0.15s ease-in-out;
+      cursor: pointer;
+    }
+    .btn[disabled] {
+        cursor: not-allowed;
+        opacity: 0.5;
+    }
+    .btn-primary {
+      color: #fff;
+      background-color: #007bff;
+      border-color: #007bff;
+    }
+
+    .btn-primary:hover {
+      color: #fff;
+      background-color: #0069d9;
+      border-color: #0062cc;
+    }
+
+    .btn-primary:focus, .btn-primary.focus {
+      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
+    }
+
+    .btn-primary.disabled, .btn-primary:disabled {
+      background-color: #007bff;
+      border-color: #007bff;
+    }
+    .alert {
+      position: relative;
+      padding: 0.75rem 1.25rem;
+      margin-bottom: 1rem;
+      border: 1px solid transparent;
+      border-radius: 0.25rem;
+    }
+    .alert-info {
+      color: #0c5460;
+      background-color: #d1ecf1;
+      border-color: #bee5eb;
+    }
+    .alert p {
+      margin: 0
+    }
+    .hide {
+      display: none;
+    }
+    @media only screen and (max-width: 479px) {
+        .btn {
+            width: 100%;
+        }
+    }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Телеграф</h1>
+        <div id="alert" class="alert alert-info hide">
+            <p>Отправлено!</p>
+        </div>
+        <form id="form" action="/message" method="post">
+            <div class="form-group">
+                <label for="message">Сообщение</label>
+                <input id="message" type="text" name="message" class="form-control" id="message" placeholder="Введите сообщение">
+            </div>
+            <button id="submit" type="submit" class="btn btn-primary">Отправить</button>
+        </form>
+    </div>
+
+<script>
+var button = document.getElementById( "submit" );
+var form = document.getElementById( "form" );
+var alert = document.getElementById( "alert" );
+var message = document.getElementById( "message" );
+form.addEventListener( "submit", function( e ) {
+    e.preventDefault();
+    var msg = message.value.trim();
+    if( !msg )
+        return;
+
+    button.setAttribute( "disabled", "disabled" );
+    var xhr = new XMLHttpRequest();
+    xhr.open( "POST", "/message", true );
+    xhr.setRequestHeader( "Content-Type", "application/x-www-form-urlencoded" );
+    xhr.onreadystatechange = function() {
+        if( xhr.readyState != 4 )
+            return;
+
+        alert.className = "alert alert-info";
+        button.removeAttribute( "disabled" );
+        setTimeout( function() {
+            alert.className = "alert alert-info hide";
+        }, 10000 );
+    };
+    xhr.send( "message=" + encodeURIComponent( msg ) );
+}, true );
+</script>
+</body>
+</html>
